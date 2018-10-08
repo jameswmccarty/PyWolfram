@@ -42,9 +42,16 @@ def alive(i, step):
 	#i is index into step (column)
 	#step is current row
 	step = step - 1
-	l = grid[step][i-1]
+	#wrap around edges
+	if i == 0:
+		l = grid[step][width-1]
+	else:
+		l = grid[step][i-1]
 	c = grid[step][i]
-	r = grid[step][i+1]
+	if i == width-1:
+		r = grid[step][0]
+	else:
+		r = grid[step][i+1]
 	if (rule & 0x80) and (l == ON and c == ON and r == ON): 
 		return True
 	elif (rule & 0x40) and (l == ON and c == ON and r == OFF): 
@@ -98,7 +105,7 @@ else:
 	grid[0][width/2] = ON
 
 for step in xrange(1, steps):
-	for col in xrange(1, width-1):
+	for col in xrange(0, width):
 		if alive(col, step):
 			grid[step][col] = ON
 		else:
